@@ -4,8 +4,13 @@
 -- WHERE name = 'Waylon Boehm'
 -- GROUP BY name
 
-SELECT count(assistance_requests.*) as total_assistances, teachers.name
+const queryString = `
+SELECT teachers.name as teacher, cohorts.name as cohort
 FROM assistance_requests
 JOIN teachers ON teachers.id = teacher_id
-WHERE name = 'Waylon Boehm'
-GROUP BY teachers.name;
+JOIN students ON students.id = student_id
+JOIN cohorts ON cohorts.id = cohort_id
+WHERE cohorts.name = $1
+GROUP BY teachers.name, cohorts.name
+ORDER BY teachers.name;
+`;
